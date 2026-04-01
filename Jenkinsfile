@@ -1,39 +1,35 @@
 pipeline {
     agent any
 
-    environment {
-        APP_DIR = "/var/www/projects/insight/insight"
-    }
-
     stages {
 
-        stage('Pull Code') {
+        stage('Checkout') {
             steps {
-                dir("${APP_DIR}") {
-                    sh 'git pull origin main'
-                }
+                git branch: 'main', url: 'https://github.com/codewithkathir/insight.git'
             }
         }
 
         stage('Install') {
             steps {
-                dir("${APP_DIR}") {
-                    sh 'npm install'
-                }
+                sh 'npm install'
             }
         }
 
         stage('Build') {
             steps {
-                dir("${APP_DIR}") {
-                    sh 'npm run build'
-                }
+                sh 'npm run build'
             }
         }
 
-        stage('Restart App') {
+        stage('Deploy') {
             steps {
-                sh 'pm2 restart insight-app'
+                sh '''
+                rm -rf /var/www/projects/insight/insight/*
+                cp -r * /var/www/projects/insight/insight
+
+                cd /var/www/projects/insight/insight
+                pm2 restart insight-app || pm2 start npm --name "insight-app" -- start
+                '''
             }
         }
     }
