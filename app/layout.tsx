@@ -28,7 +28,7 @@ export const metadata: Metadata = {
     apple: '/apple-icon.png',
   },
 }
-console.log("Metadata : ",Metadata)
+
 export default function RootLayout({
   children,
 }: Readonly<{
