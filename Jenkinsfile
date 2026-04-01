@@ -9,15 +9,15 @@ pipeline {
 
         stage('Pull Code') {
             steps {
-                dir("$APP_DIR") {
-                    git pull origin main
+                dir("${APP_DIR}") {
+                    sh 'git pull origin main'
                 }
             }
         }
 
         stage('Install') {
             steps {
-                dir("$APP_DIR") {
+                dir("${APP_DIR}") {
                     sh 'npm install'
                 }
             }
@@ -25,7 +25,7 @@ pipeline {
 
         stage('Build') {
             steps {
-                dir("$APP_DIR") {
+                dir("${APP_DIR}") {
                     sh 'npm run build'
                 }
             }
